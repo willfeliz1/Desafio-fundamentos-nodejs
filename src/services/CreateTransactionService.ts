@@ -1,3 +1,4 @@
+import { response } from 'express';
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import Transaction from '../models/Transaction';
 
@@ -20,6 +21,11 @@ class CreateTransactionService {
       value,
       type,
     });
+
+    const findBalance = this.transactionsRepository.getBalance();
+    if (findBalance.total < 0) {
+      throw Error('Outcome value cant be higher than your balance');
+    }
 
     return transaction;
   }
